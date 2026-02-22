@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Poppins",sans-serif;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  background:black;
+  overflow:hidden;
+}
+
+.container{
+  position:fixed;
+  inset:0;
+}
+
+.video-wrapper{
+  width:100%;
+  max-width:480px;
+  aspect-ratio:3 / 4;
+  margin:auto;
+  position:relative;
+}
+
+.video-wrapper video{
+  width:100%;
+  height:180%;
+  object-fit:cover;
+  transform:scale(2.3);   /* 👈 zoom level */
+}
+.container{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;     /* vertical center */
+  justify-content:center; /* horizontal center */
+  background:black;
+}
+
+/* TEXT */
+.text{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+  text-align:center;
+  font-size:1.9em;
+  color:#00ffff;
+  opacity:0;
+  text-shadow:
+    0 0 10px #0ff,
+    0 0 20px #0ff,
+    0 0 40px #0ff;
+}
+
+.show{ animation:fadeIn .8s forwards; }
+.hide{ animation:fadeOut .8s forwards; }
+
+@keyframes fadeIn{
+  from{opacity:0; transform:scale(.96);}
+  to{opacity:1; transform:scale(1);}
+}
+@keyframes fadeOut{
+  from{opacity:1;}
+  to{opacity:0;}
+}
+
+.tap{
+  position:absolute;
+  bottom:20px;
+  width:100%;
+  text-align:center;
+  color:#aaa;
+  font-size:.9em;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  0%{opacity:.3;}
+  50%{opacity:1;}
+  100%{opacity:.3;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- AUTOPLAY + LOOP + MUTED (required by Chrome) -->
+  <video id="video" autoplay loop muted playsinline>
+    <source src="bg.mp4" type="video/mp4">
+  </video>
+
+  <div id="text" class="text"></div>
+  <div id="tap" class="tap">Tap once to begin</div>
+
+</div>
+
+<script>
+const lines = [
+  "💫Ek ALLAH 🕋💞",
+  "Do Jahaan 💫...",
+  "3 Witr 😄",
+  "4 Kitaabe🥰...",
+  "5 Arkaan🥺",
+  "6 Kalima🥰💞...",
+  "7 Aasmaan😄",
+  "8 Darwaaze😇",
+  "In Sabki Kasam🙌",
+  "Mujhe aapse Muhabbat hai 💞💞...",
+  "Aap mere liye ek khuda ka tohfa ho",
+  "And you're my Amaanah ... Aaifu 🥰"
+];
+
+const video = document.getElementById("video");
+const text = document.getElementById("text");
+const tap = document.getElementById("tap");
+
+let started = false;
+let index = 0;
+
+function showLine(){
+  if(index >= lines.length) return;
+  text.textContent = lines[index];
+  text.className = "text show";
+
+  setTimeout(()=>{
+    text.className = "text hide";
+  },3000);
+
+  index++;
+}
+
+document.addEventListener("click", ()=>{
+  if(started) return;     // 👈 only once
+  started = true;
+
+  tap.style.display = "none";
+
+  // unmute AFTER user interaction (Chrome rule)
+  video.muted = false;
+  video.volume = 1;
+  video.play();
+
+  showLine();
+  setInterval(showLine, 4000);
+});
+</script>
+
+</body>
+</html>
